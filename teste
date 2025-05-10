@@ -1,0 +1,29 @@
+from graphviz import Digraph
+
+# Criando o diagrama ER simplificado usando Graphviz
+dot = Digraph(comment='Modelo Conceitual E-commerce')
+
+# Entidades principais
+dot.node('C', 'Cliente')
+dot.node('PF', 'Pessoa Física\n(cpf, nome, nascimento)')
+dot.node('PJ', 'Pessoa Jurídica\n(cnpj, razão social)')
+dot.node('P', 'Pedido\n(data, valor total)')
+dot.node('FP', 'Forma de Pagamento\n(tipo, detalhes)')
+dot.node('E', 'Entrega\n(status, código rastreio)')
+dot.node('I', 'Item do Pedido\n(qtd, preço)')
+dot.node('PR', 'Produto\n(nome, preço, descrição)')
+
+# Relacionamentos
+dot.edges(['CP', 'CJ'])  # Cliente-PF e Cliente-PJ (1:1)
+dot.edge('C', 'P', label='1:N')
+dot.edge('C', 'FP', label='1:N')
+dot.edge('P', 'E', label='1:1')
+dot.edge('P', 'I', label='1:N')
+dot.edge('I', 'PR', label='N:1')
+
+# Restrições exclusivas PF/PJ
+dot.edge('C', 'PF', label='1:1 opcional')
+dot.edge('C', 'PJ', label='1:1 opcional')
+
+# Renderizar o diagrama em PNG
+dot.render('modelo_conceitual_ecommerce', format='png', cleanup=False)
